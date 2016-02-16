@@ -18,7 +18,7 @@ $(document).ready(function () {
     var id = $(elem).parent().data("id");
 
     $.ajax({
-      url: "http://0.0.0.0:8000/api/doughnuts/" + id,
+      url: "/api/doughnuts/" + id,
       method: "DELETE",
       success: function (response, status) {
         console.log(response);
@@ -52,7 +52,7 @@ $(document).ready(function () {
 
   var getAllDonuts = function () {
     $.ajax({
-      url: "http://0.0.0.0:8000/api/doughnuts",
+      url: "/api/doughnuts",
       method: "GET",
       success: function (response, status) {
         response.forEach(function (elem) {
@@ -74,7 +74,7 @@ $(document).ready(function () {
       var style = $('#new-doughnut-style').val();
 
       $.ajax({
-        url: "http://0.0.0.0:8000/api/doughnuts",
+        url: "/api/doughnuts",
         method: "POST",
         data: {
           flavor: flavor,
@@ -100,7 +100,7 @@ $(document).ready(function () {
       var style = $('#edit-doughnut-style').val();
 
       $.ajax({
-        url: "http://0.0.0.0:8000/api/doughnuts/" + id,
+        url: "/api/doughnuts/" + id,
         method: "PUT",
         data: {
           flavor: flavor,
@@ -120,10 +120,23 @@ $(document).ready(function () {
     });
   };
 
+  var bindSignout = function () {
+    $('#signout').on('click', function (e) {
+      $.ajax({
+        type: "DELETE",
+        url: "/api/sessions",
+        success: function (response) {
+          window.location.href = '/';
+        }
+      });
+    });
+  };
+
   var init = function () {
     getAllDonuts();
     bindCreateButton();
     bindUpdateDonut();
+    bindSignout();
   };
 
   init();

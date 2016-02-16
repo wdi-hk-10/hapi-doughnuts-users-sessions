@@ -20,6 +20,8 @@ var plugins = [
   { register: require('inert')},
   { register: require('./routes/static_pages.js')},
   { register: require('./routes/api/doughnuts.js')},
+  { register: require('./routes/api/users.js')},
+  { register: require('./routes/api/sessions.js') },
   { register: require('hapi-mongodb'),
     options: {
       "url": process.env.MONGOLAB_URI || "mongodb://127.0.0.1:27017/hapi-doughnuts",
@@ -27,6 +29,15 @@ var plugins = [
         "db": {
           "native_parser": false
         }
+      }
+    }
+  },
+  {
+    register: require('yar'),
+    options: {
+      cookieOptions: {
+        password: process.env.COOKIE_PASSWORD || '12345678912345678912345678912345678912',
+        isSecure: false
       }
     }
   }

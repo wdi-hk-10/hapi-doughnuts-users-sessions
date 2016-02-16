@@ -1,7 +1,9 @@
+var Auth = require('./api/auth');
+
 exports.register = function (server, options, next) {
-  // serving static files
   server.route([
     {
+      // serving static files
       method: 'GET',
       path: "/public/{path*}",
       handler: {
@@ -15,7 +17,7 @@ exports.register = function (server, options, next) {
       method: 'GET',
       path: '/',
       handler: function(request, reply) {
-        reply.view('index');
+        reply.view('index').code(200);
       }
     },
     {
@@ -23,7 +25,7 @@ exports.register = function (server, options, next) {
       method: 'GET',
       path: '/doughnuts',
       handler: function(request, reply) {
-        reply.view('doughnuts');
+        reply.view('doughnuts').code(200);
       }
     }
   ]);

@@ -1,14 +1,14 @@
 exports.register = function (server, options, next) {
   server.route([
-    {
+    { // INDEX. Get All Doughnuts
       method: 'GET',
       path: '/api/doughnuts',
       handler: function (request, reply) {
         var db = request.server.plugins['hapi-mongodb'].db;
 
         db.collection('doughnuts').find().toArray(function (err, results) {
-          if (err) { return reply(err); }
-          reply(results);
+          if (err) { return reply(err).code(400); }
+          reply(results).code(200);
         });
       }
     },
@@ -21,8 +21,8 @@ exports.register = function (server, options, next) {
         var flavor = request.payload.flavor;
 
         db.collection('doughnuts').insert({style: style, flavor: flavor}, function (err, doc) {
-          if (err) { return reply(err); }
-          reply(doc.ops[0]);
+          if (err) { return reply(err).code(400); }
+          reply(doc.ops[0]).code(200);
         });
       }
     },
@@ -35,8 +35,8 @@ exports.register = function (server, options, next) {
         var id = ObjectID(request.params.id);
 
         db.collection('doughnuts').remove({"_id": id}, function (err, doc) {
-          if (err) { return reply(err); }
-          reply(doc);
+          if (err) { return reply(err).code(400); }
+          reply(doc).code(200);
         });
       }
     },
@@ -54,8 +54,8 @@ exports.register = function (server, options, next) {
           {"_id": id},
           {style: style, flavor: flavor},
           function (err, doc) {
-            if (err) { return reply(err); }
-            reply(doc.value);
+            if (err) { return reply(err).code(400); }
+            reply(doc.value).code(200);
           }
         );
       }
