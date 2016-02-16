@@ -16,6 +16,35 @@ exports.register = function (server, options, next) {
       }
     },
     {
+      method: 'GET',
+      path: '/api/{username}/doughnuts',
+      handler: function (request, reply) {
+        var db = request.server.plugins['hapi-mongodb'].db;
+
+        var username = request.params.username;
+
+        // search the username, and extract the id of the user
+        db.collection('users').findOne({username: username}, function (err, user) {
+          if (err) { return reply(err).code(400); }
+
+          // check if user exist
+          if (user === null){
+            return reply({message: "User Not Found"}).code(404);
+          }
+
+          // given the user_id, we will find all the doughnts had this user_id
+          var user_id = user._id;
+
+          db.collection('doughnuts').find({user_id: user_id}).toArray(function (err, results){
+            if (err) { return reply(err).code(400); }
+
+            reply(results).code(200);
+          });
+
+        });
+      }
+    },
+    { // Create Doughnut
       method: 'POST',
       path: '/api/doughnuts',
       handler: function (request, reply) {
@@ -43,7 +72,7 @@ exports.register = function (server, options, next) {
         });
       }
     },
-    {
+    { // Delete Doughnut
       method: 'DELETE',
       path: '/api/doughnuts/{id}',
       handler: function (request, reply) {
@@ -81,7 +110,7 @@ exports.register = function (server, options, next) {
         });
       }
     },
-    {
+    { // Update Doughnut
       method: 'PUT',
       path: '/api/doughnuts/{id}',
       handler: function (request, reply) {
