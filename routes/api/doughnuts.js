@@ -1,3 +1,6 @@
+var Joi    = require('joi');
+var Auth   = require('./auth');
+
 exports.register = function (server, options, next) {
   server.route([
     { // INDEX. Get All Doughnuts

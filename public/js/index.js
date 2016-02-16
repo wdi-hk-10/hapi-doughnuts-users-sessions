@@ -56,22 +56,9 @@ $(document).ready(function () {
     });
   };
 
-  var getAuthenticated = function () {
-    $.ajax({
-      type: 'GET',
-      url: '/api/authenticated',
-      success: function(response){
-        if (response.authenticated) {
-          window.location.href = "/doughnuts";
-        }
-      }
-    });
-  };
-
   var init = function () {
     bindSignup();
     bindSignin();
-    getAuthenticated();
   };
 
   init();

@@ -44,7 +44,7 @@ exports.register = function(server, options, next) {
                     "user_id": userMongo._id
                   });
 
-                  return reply({ "message:": "Authenticated" }).code(400);
+                  return reply({ "message:": "Authenticated" }).code(200);
                 });
               } else {
                 reply({ message: "Not authorized" }).code(400);

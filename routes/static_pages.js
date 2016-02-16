@@ -13,11 +13,17 @@ exports.register = function (server, options, next) {
       }
     },
     {
-      // Retrieve all users
+      // Login Page
       method: 'GET',
       path: '/',
       handler: function(request, reply) {
-        reply.view('index').code(200);
+        Auth.authenticated(request, function (result) {
+          if (result.authenticated){
+            reply.redirect('/doughnuts').code(307);
+          } else {
+            reply.view('index', {message: request.query.message}).code(200);
+          }
+        });
       }
     },
     {
@@ -25,7 +31,13 @@ exports.register = function (server, options, next) {
       method: 'GET',
       path: '/doughnuts',
       handler: function(request, reply) {
-        reply.view('doughnuts').code(200);
+        Auth.authenticated(request, function (result) {
+          if (result.authenticated){
+            reply.view('doughnuts').code(200);
+          } else {
+            reply.redirect('/?message=Please Signin First').code(307);
+          }
+        });
       }
     }
   ]);
