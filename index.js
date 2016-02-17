@@ -16,13 +16,15 @@ server.connection({
 
 // plugins that needs to be registered
 var plugins = [
-  { register: require('vision')},
-  { register: require('inert')},
+  { register: require('vision')}, // views
+  { register: require('inert')}, // public files hosting
   { register: require('./routes/static_pages.js')},
+  { register: require('./routes/doughnuts.js')},
+  { register: require('./routes/users.js')},
   { register: require('./routes/api/doughnuts.js')},
   { register: require('./routes/api/users.js')},
   { register: require('./routes/api/sessions.js') },
-  { register: require('hapi-mongodb'),
+  { register: require('hapi-mongodb'), // setup the mongo connect
     options: {
       "url": process.env.MONGOLAB_URI || "mongodb://127.0.0.1:27017/hapi-doughnuts",
       "settings": {
@@ -33,7 +35,7 @@ var plugins = [
     }
   },
   {
-    register: require('yar'),
+    register: require('yar'), // setup cookie stuff
     options: {
       cookieOptions: {
         password: process.env.COOKIE_PASSWORD || '12345678912345678912345678912345678912',

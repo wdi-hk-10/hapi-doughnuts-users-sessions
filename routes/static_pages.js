@@ -1,3 +1,4 @@
+// static pages is static views such as home, about, contact..etc
 var Auth = require('./api/auth');
 
 exports.register = function (server, options, next) {
@@ -22,20 +23,6 @@ exports.register = function (server, options, next) {
             reply.redirect('/doughnuts').code(307);
           } else {
             reply.view('index', {message: request.query.message}).code(200);
-          }
-        });
-      }
-    },
-    {
-      // Retrieve all doughnuts
-      method: 'GET',
-      path: '/doughnuts',
-      handler: function(request, reply) {
-        Auth.authenticated(request, function (result) {
-          if (result.authenticated){
-            reply.view('doughnuts').code(200);
-          } else {
-            reply.redirect('/?message=Please Signin First').code(307);
           }
         });
       }

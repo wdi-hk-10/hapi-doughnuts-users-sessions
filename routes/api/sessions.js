@@ -9,8 +9,6 @@ exports.register = function(server, options, next) {
       path: '/api/sessions',
       handler: function(request, reply) {
         var db = request.server.plugins['hapi-mongodb'].db;
-
-        // TODO: Add email authentication (optional)
         var user = request.payload;
 
         db.collection('users').findOne({ "username": user.username }, function(err, userMongo) {
@@ -23,11 +21,8 @@ exports.register = function(server, options, next) {
             Bcrypt.compare(user.password, userMongo.password, function(err, result) {
               // If password matches, please authenticate user and add to cookie
               if (result) {
-
-                // if password matches, please authenticate user and add to cookie
                 var randomKeyGenerator = function () { return (((1+Math.random())*0x10000)|0).toString(16).substring(1); };
                 var randomKey = randomKeyGenerator();
-                var db = request.server.plugins['hapi-mongodb'].db;
                 var newSession = {
                   "session_id": randomKey,
                   "user_id": userMongo._id
@@ -64,10 +59,10 @@ exports.register = function(server, options, next) {
           return reply({ "message": "Already logged out" }).code(400);
         }
 
-        db.collection('sessions').remove({ "session_id": session.session_id }, function(err, writeResult) {
+        db.collection('sessions').remove({ "session_id": session.session_id }, function(err, doc) {
           if (err) { return reply('Internal MongoDB error', err).code(400); }
 
-          reply(writeResult).code(200);
+          reply(doc).code(200);
         });
       }
     },

@@ -7,6 +7,8 @@ module.exports.authenticated = function(request, callback) {
   }
 
   db.collection('sessions').findOne({ "session_id": session.session_id }, function(err, result) {
+    if (err) { return reply(err).code(400); }
+
     if (result === null) {
       return callback({
         "authenticated": false,
